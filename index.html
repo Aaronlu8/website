@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人作品集</title>
+    <!-- 使用 CDN 加载样式库 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 在这里添加自定义样式 */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .chat-box {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .portfolio-item {
+            transition: transform 0.3s ease;
+            position: relative;
+            width: 100%;
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.05);
+        }
+
+        .social-links a {
+            transition: transform 0.3s, color 0.3s;
+            display: inline-block;
+        }
+        
+        .social-links a:hover {
+            transform: scale(1.2);
+            color: #ff6b6b !important;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .delete-btn {
+            position: absolute !important;
+            top: 10px !important;
+            right: 10px !important;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .portfolio-item:hover .delete-btn {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">艾伦</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">作品集</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">联系</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄板块 -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1 class="display-4">创意无限 • 影像诉说</h1>
+            <p class="lead">摄影师 | 创意工作者 | 故事讲述者</p>
+        </div>
+    </section>
+
+    <!-- AI助手搜索框 -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-center mb-3">AI助手</h5>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="aiInput" 
+                                    placeholder="有什么想问的？试试AI助手...">
+                                <button class="btn btn-primary" type="button" onclick="askAI()">
+                                    <i class="fas fa-robot me-1"></i>询问
+                                </button>
+                            </div>
+                            <div id="aiResponse" class="mt-3 d-none">
+                                <div class="border rounded p-3 bg-light">
+                                    <p class="mb-0"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于板块 -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">关于我</h2>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="images/profile.jpg" alt="艾伦的个人照片" class="img-fluid rounded">
+                </div>
+                <div class="col-md-6">
+                    <p>我就是我，不一样的烟火...... 谁说一个人一辈子只能体验一种人生？！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品集板块 -->
+    <section id="portfolio" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">作品集</h2>
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- 作品将通过 JavaScript 动态添加 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI聊天框 -->
+    <div class="chat-widget">
+        <button class="chat-toggle" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chat-box" id="chatBox">
+            <div class="p-3">
+                <h5>AI助手</h5>
+                <div class="chat-messages" style="height: 300px; overflow-y: auto;">
+                    <!-- 消息将在这里显示 -->
+                </div>
+                <div class="input-group mt-3">
+                    <input type="text" class="form-control" id="chatInput" placeholder="输入消息...">
+                    <button class="btn btn-primary" onclick="sendMessage()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>联系方式</h5>
+                    <p>邮箱：wenchaoluu@163.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>社交媒体</h5>
+                    <div class="social-links">
+                        <a href="https://weibo.com/u/7912217546" target="_blank" class="text-light me-3"><i class="fab fa-weibo"></i></a>
+                        <a href="https://www.xiaohongshu.com/user/profile/57fd7b3d3460942dd299f3ee" target="_blank" class="text-light"><i class="fas fa-heart"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-0">&copy; 2024 艾伦. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 使用 CDN 加载脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 预设图片数据
+        const portfolioItems = [
+            {
+                id: 1,
+                title: '作品1',
+                image: 'images/hero.jpg'
+            },
+            {
+                id: 2,
+                title: '作品2',
+                image: 'images/profile.jpg'
+            },
+            {
+                id: 3,
+                title: '作品3',
+                image: 'images/portfolio/landscape1.jpg'
+            },
+            {
+                id: 4,
+                title: '作品4',
+                image: 'images/portfolio/landscape2.jpg'
+            },
+            {
+                id: 5,
+                title: '作品5',
+                image: 'images/portfolio/portrait1.jpg'
+            }
+        ];
+
+        // 修改加载作品集函数
+        function loadPortfolio() {
+            const grid = document.getElementById('portfolio-grid');
+            grid.innerHTML = ''; // 清空现有内容
+            
+            portfolioItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'portfolio-item';
+                div.innerHTML = `
+                    <div class="position-relative">
+                        <a href="#" class="portfolio-link" data-image="${item.image}" data-title="${item.title}">
+                            <img src="${item.image}" alt="${item.title}" class="img-fluid rounded">
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+
+            // 绑定图片点击事件
+            document.querySelectorAll('.portfolio-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                    const modalImage = document.getElementById('modalImage');
+                    const modalTitle = document.querySelector('.modal-title');
+                    
+                    modalImage.src = this.dataset.image;
+                    modalTitle.textContent = this.dataset.title;
+                    modal.show();
+                });
+            });
+        }
+
+        // 聊天框功能
+        function toggleChat() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message) {
+                // 这里添加发送消息的逻辑
+                input.value = '';
+            }
+        }
+
+        // AI助手功能
+        function askAI() {
+            const input = document.getElementById('aiInput');
+            const response = document.getElementById('aiResponse');
+            const responseParagraph = response.querySelector('p');
+            
+            if (input.value.trim()) {
+                // 显示加载状态
+                response.classList.remove('d-none');
+                responseParagraph.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI正在思考...';
+                
+                // 这里可以添加实际的AI接口调用
+                // 目前用模拟响应演示
+                setTimeout(() => {
+                    responseParagraph.textContent = `感谢您的提问：${input.value}
+                        这是一个模拟的AI响应，您可以根据需要接入实际的AI服务。`;
+                }, 1000);
+            }
+        }
+        
+        // 添加回车键触发功能
+        document.getElementById('aiInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askAI();
+            }
+        });
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPortfolio();
+        });
+
+        // 绑定事件处理函数
+        function bindEvents() {
+            // 删除按钮事件
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = parseInt(this.dataset.id);
+                    deleteItem(id);
+                });
+            });
+
+            // 图片查看事件
+            document.querySelectorAll('.portfolio-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                    const modalImage = document.getElementById('modalImage');
+                    const modalTitle = document.querySelector('.modal-title');
+                    
+                    modalImage.src = this.dataset.image;
+                    modalTitle.textContent = this.dataset.title;
+                    modal.show();
+                });
+            });
+        }
+    </script>
+
+    <!-- 图片查看模态框 -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" class="img-fluid" id="modalImage">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
